@@ -9,16 +9,25 @@ public class CameraFollow : MonoBehaviour
     private float _followSpeed;
     [SerializeField]
     private Transform _transformTarget;
+    private bool canFollow;
 
     void Start()
     {
-
+        canFollow = true;
+        if (_transformTarget == null)
+        {
+            canFollow = false;
+        }
     }
     private void FixedUpdate()
     {
-        Vector3 newPosition = _transformTarget.position;
-        //newPosition.y = _transformTarget.position.y + 0.8f;
-        newPosition.z = -10;
-        transform.position = Vector3.Slerp(transform.position, newPosition, _followSpeed * Time.deltaTime);
+        if (canFollow)
+        {
+            Vector3 newPosition = _transformTarget.position;
+            //newPosition.y = _transformTarget.position.y + 0.8f;
+            newPosition.z = -10;
+            transform.position = Vector3.Slerp(transform.position, newPosition, _followSpeed * Time.deltaTime);
+
+        }
     }
 }
