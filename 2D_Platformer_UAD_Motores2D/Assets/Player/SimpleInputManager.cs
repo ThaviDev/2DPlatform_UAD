@@ -14,7 +14,7 @@ public class SimpleInputManager : MonoBehaviour
     bool jumpBtn;
     bool attack1Btn;
     bool dashBtn;
-
+    bool slowedBtn;
     public bool InputRightButton
     {
         get { return rightBtn; }
@@ -38,6 +38,11 @@ public class SimpleInputManager : MonoBehaviour
     public bool InputDashBtn
     {
         get { return dashBtn; }
+    }
+
+    public bool InputSlowedBtn
+    {
+        get { return slowedBtn; }
     }
 
     private void Awake()
@@ -82,6 +87,12 @@ public class SimpleInputManager : MonoBehaviour
         {
             dashBtn = false;
         }
+        if (OnSlowDown()){
+            slowedBtn = true;
+        } else
+        {
+            slowedBtn = false;
+        }
     }
 
     public static bool OnMoveRight()
@@ -107,6 +118,11 @@ public class SimpleInputManager : MonoBehaviour
     public static bool OnDash()
     {
         return _input.actions.FindAction("Dash").WasPressedThisFrame();
+    }
+
+    public static bool OnSlowDown()
+    {
+        return _input.actions.FindAction("SlowDown").IsPressed();
     }
 
 }

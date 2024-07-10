@@ -2559,9 +2559,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30871ef1fd39e2f4c947455a9b4e1c74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeed: 2
-  _jumpForce: 3
+  _normalMoveSpeed: 3
+  _slowMoveSpeed: 1
+  _jumpForce: 3.6
   _doubleJumpPower: 1.2
+  _dashForce: 3.5
+  _dashCooldown: 0.2
   _currentHealth: 0
   _maxHealth: 0
   _startingHealth: 3
@@ -2614,6 +2617,7 @@ MonoBehaviour:
     - {fileID: 1653428238, guid: 8f097edeafdfd4f4aa5e3c756812234f, type: 3}
     - {fileID: 473592415, guid: 8f097edeafdfd4f4aa5e3c756812234f, type: 3}
     - {fileID: 468806354, guid: 8f097edeafdfd4f4aa5e3c756812234f, type: 3}
+    - {fileID: 468806354, guid: 8f097edeafdfd4f4aa5e3c756812234f, type: 3}
   - _frames:
     - {fileID: 1219987481, guid: 1bd846d0f43dd0845b7f3bedcde7613f, type: 3}
     - {fileID: 443267330, guid: 1bd846d0f43dd0845b7f3bedcde7613f, type: 3}
@@ -2625,12 +2629,19 @@ MonoBehaviour:
     - {fileID: -731135378, guid: 785d837b631609945893a681416d647a, type: 3}
     - {fileID: -14532069, guid: 785d837b631609945893a681416d647a, type: 3}
     - {fileID: -1666091018, guid: 785d837b631609945893a681416d647a, type: 3}
+    - {fileID: -1666091018, guid: 785d837b631609945893a681416d647a, type: 3}
   _animationsID: 0
   _prevAnimation: 0
   _spriteRen: {fileID: 1709544400}
   _player: {fileID: 295936243}
-  _timePerFrame: 0.1
-  _isFliped: 0
+  _timePerFrame:
+  - 0.1
+  - 0.1
+  - 0.1
+  - 0.1
+  - 0.07
+  - 0.1
+  - 0.07
   _canLoop: 01010001010101
   _canExit: 01010000000100
 --- !u!114 &295936245

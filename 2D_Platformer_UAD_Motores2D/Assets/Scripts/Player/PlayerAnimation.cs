@@ -20,14 +20,13 @@ public class PlayerAnimation : MonoBehaviour
     [SerializeField]
     PlayerMovement _player;
 
-    [SerializeField]
-    float _timePerFrame = 1;
+
 
     int _currentAnim = 0;
     int _currentFrame = 0;
     float _currentTime = 0;
 
-    public bool _isFliped;
+    [SerializeField] List<float> _timePerFrame = new List<float>();
     [SerializeField] List<bool> _canLoop = new List<bool>();
     [SerializeField] List<bool> _canExit = new List<bool>();
 
@@ -42,16 +41,14 @@ public class PlayerAnimation : MonoBehaviour
     {
         if (_prevAnimation != _animationsID && _canExit[_currentAnim] == true)
         {
-            _prevAnimation = _animationsID;
-            UpdateAnimationBeingPlayed();
-            _isOnPermaAnim = false;
+            ChangeAnim();
         }
         {
             _isOnPermaAnim = true;
         }
 
         _currentTime += Time.deltaTime;
-        if (_currentTime >= _timePerFrame)
+        if (_currentTime >= _timePerFrame[_currentAnim])
         {
             _currentTime = 0;
             _currentFrame++;
@@ -66,21 +63,18 @@ public class PlayerAnimation : MonoBehaviour
                 }
                 if (_isOnPermaAnim == true && _canLoop[_currentAnim])
                 {
-                    _prevAnimation = _animationsID;
-                    UpdateAnimationBeingPlayed();
-                    _isOnPermaAnim = false;
+                    ChangeAnim();
                 }
             }
         }
         _spriteRen.sprite = _anims[_currentAnim]._frames[_currentFrame];
+    }
 
-        if (!_isFliped)
-        {
-            _spriteRen.flipX = false;
-        } else
-        {
-            _spriteRen.flipX = true;
-        }
+    private void ChangeAnim()
+    {
+        _prevAnimation = _animationsID;
+        UpdateAnimationBeingPlayed();
+        _isOnPermaAnim = false;
     }
     private void UpdateAnimationBeingPlayed()
     {
@@ -114,5 +108,16 @@ public class PlayerAnimation : MonoBehaviour
             _currentAnim = 0;
         }
         _currentFrame = 0;
+    }
+
+    public void FlipSprite(bool fliped)
+    {
+        if (fliped)
+        {
+            _spriteRen.flipX = true;
+        }
+        else {
+            _spriteRen.flipX = false;
+        }
     }
 }
