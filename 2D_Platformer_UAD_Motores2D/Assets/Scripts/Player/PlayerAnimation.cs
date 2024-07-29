@@ -29,6 +29,7 @@ public class PlayerAnimation : MonoBehaviour
     [SerializeField] List<float> _timePerFrame = new List<float>();
     [SerializeField] List<bool> _canLoop = new List<bool>();
     [SerializeField] List<bool> _canExit = new List<bool>();
+    [SerializeField] List<int> _animPriority = new List<int>();
 
     bool _isOnPermaAnim;
 

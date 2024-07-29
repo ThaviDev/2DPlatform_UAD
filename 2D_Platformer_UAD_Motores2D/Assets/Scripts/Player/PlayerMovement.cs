@@ -52,19 +52,15 @@ public class PlayerMovement : MonoBehaviour
         var inputDash = _inputManager.InputDashBtn;
         var inputSlowed = _inputManager.InputSlowedBtn;
 
-        print(inputSlowed);
-
         if (inputRight || inputLeft)
         {
             if (inputSlowed)
             {
-                print("Estoy siendo despacio");
                 _moveSpeed = _slowMoveSpeed;
                 _playerAnim._animationsID = PlayerAnimation.myAnimations.Moving;
             }
             else
             {
-                print("Estoy moviendome normal");
                 _moveSpeed = _normalMoveSpeed;
                 _playerAnim._animationsID = PlayerAnimation.myAnimations.Run;
             }
