@@ -10,6 +10,11 @@ public class PasablePlatform : MonoBehaviour
     [SerializeField]
     float _yOffset;
 
+    private void Start()
+    {
+        _pTransform = FindObjectOfType<PlayerMovement>().transform;
+    }
+
     void FixedUpdate()
     {
         if (_pTransform.transform.position.y - _yOffset < transform.position.y)

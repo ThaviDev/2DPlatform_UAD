@@ -5,7 +5,7 @@ using UnityEngine;
 public class MovingPlatform : MonoBehaviour
 {
     [SerializeField]
-    bool _isVertical = false;
+    bool _isHorizontal = false;
     [SerializeField]
     float _speed = 5;
     [SerializeField]
@@ -29,7 +29,7 @@ public class MovingPlatform : MonoBehaviour
 
     void Update()
     {
-        if (_isVertical)
+        if (_isHorizontal)
         {
             _initialDir = Vector3.left;
             VerticalMovement();

@@ -9,7 +9,6 @@ public class HijoPrueba : PadrePrueba
     void Start()
     {
         _mySprite = base.EscojerApariencia();
-        
     }
 
     void Update()

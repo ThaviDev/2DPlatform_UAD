@@ -14,20 +14,31 @@ public class PlayerMovement : MonoBehaviour
     bool _canDash = true;
     float _startingDashCooldown;
     [SerializeField] float _dashCooldown = 1;
-    [SerializeField] int _currentHealth;
-    [SerializeField] int _maxHealth;
+    [SerializeField] int _currentHealth = 3;
+    [SerializeField] int _maxHealth = 10;
     [SerializeField] int _startingHealth = 3;
     [SerializeField] bool _isDead;
     [SerializeField] bool _canDoubleJump;
     [SerializeField] bool _isGrounded;
     int _movementXDirection;
     int _lastMovementDirection;
+    [SerializeField] Vector2 _lastCheckPointPos;
+
+    [SerializeField] AudioClip _jumpSound;
+    [SerializeField] AudioClip _doubleJumpSound;
+    [SerializeField] AudioClip _dashSound;
+    [SerializeField] AudioClip _pauseSound;
+    [SerializeField] AudioClip _eatFruitSound;
+    [SerializeField] AudioClip _bulletSound;
 
     [SerializeField] Rigidbody2D _rb;
 
     [SerializeField] FruitColector _fruitManager;
     [SerializeField] PlayerAnimation _playerAnim;
     [SerializeField] SimpleInputManager _inputManager;
+    [SerializeField] PauseManager _pauseManager;
+    [SerializeField] GameObject _pBullet;
+    [SerializeField] UIColectables _uIInfo;
 
     /*
     private void Awake()
@@ -39,6 +50,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
+        _lastCheckPointPos = new Vector2(0f, 0f);
         _startingDashCooldown = _dashCooldown;
         RestartStats();
     }
@@ -51,6 +63,9 @@ public class PlayerMovement : MonoBehaviour
         var inputAttack = _inputManager.InputAttack1Button;
         var inputDash = _inputManager.InputDashBtn;
         var inputSlowed = _inputManager.InputSlowedBtn;
+        var inputPause = _inputManager.InputPauseBtn;
+
+        _uIInfo._livesCount = _currentHealth;
 
         if (inputRight || inputLeft)
         {
@@ -126,8 +141,10 @@ public class PlayerMovement : MonoBehaviour
             var currentJumpPower = _jumpForce;
             if (_isGrounded)
             {
+                SFXManager.Instance.PlaySFXClip(_jumpSound, 1);
             }
             else if (_canDoubleJump) {
+                SFXManager.Instance.PlaySFXClip(_doubleJumpSound, 1);
                 currentJumpPower = _jumpForce * _doubleJumpPower;
                 _canDoubleJump = false;
             } else
@@ -141,6 +158,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (inputDash && _canDash)
         {
+            SFXManager.Instance.PlaySFXClip(_dashSound, 1);
             _playerAnim._animationsID = PlayerAnimation.myAnimations.Dash;
             _canDash = false;
             _isDashing = true;
@@ -156,6 +174,24 @@ public class PlayerMovement : MonoBehaviour
             {
                 _dashCooldown = _startingDashCooldown;
                 _canDash = true;
+            }
+        }
+
+        if (inputAttack)
+        {
+            _playerAnim._animationsID = PlayerAnimation.myAnimations.Attack1;
+            StartCoroutine(SpawnBullet());
+        }
+
+        if (inputPause)
+        {
+            SFXManager.Instance.PlaySFXClip(_pauseSound, 1);
+            if (_pauseManager.isPaused)
+            {
+                _pauseManager.Resume();
+            } else
+            {
+                _pauseManager.Pause();
             }
         }
     }
@@ -174,13 +210,45 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void PlayerDied()
+    IEnumerator SpawnBullet()
     {
+        yield return new WaitForSeconds(0.25f);
+        SFXManager.Instance.PlaySFXClip(_bulletSound, 1);
 
+        GameObject _myBul = Instantiate(_pBullet, this.transform.position,this.transform.rotation);
+        BulletMotor _bulMot = _myBul.GetComponent<BulletMotor>();
+        if (_movementXDirection > 0)
+        {
+            _bulMot._dirIsRight = true;
+        } else if (_movementXDirection < 0)
+        {
+            _bulMot._dirIsRight = false;
+        } else if (_lastMovementDirection > 0)
+        {
+            _bulMot._dirIsRight = true;
+        } else if (_lastMovementDirection < 0)
+        {
+            _bulMot._dirIsRight = false;
+        }
+    }
+
+    public void PlayerDied()
+    {
+        _playerAnim._animationsID = PlayerAnimation.myAnimations.Dying;
+        _uIInfo._livesCount = _currentHealth;
+        _pauseManager.GameOver();
+        Destroy(this);
+    }
+
+    public void PlayerWon()
+    {
+        _pauseManager.Victory();
+        Destroy(this);
     }
 
     public void HasColectedFruit()
     {
+        SFXManager.Instance.PlaySFXClip(_eatFruitSound, 1);
         _fruitManager.AddFruit();
     }
 
@@ -198,6 +266,9 @@ public class PlayerMovement : MonoBehaviour
         _currentHealth -= damageAmount;
         if (_currentHealth <= 0) {
             PlayerDied();
+        } else
+        {
+            transform.position = _lastCheckPointPos;
         }
     }
 
@@ -214,5 +285,10 @@ public class PlayerMovement : MonoBehaviour
     public void Ungrounded()
     {
         _isGrounded = false;
+    }
+    
+    public void TouchCheckPoint(GameObject _flag)
+    {
+        _lastCheckPointPos = _flag.transform.position;
     }
 }

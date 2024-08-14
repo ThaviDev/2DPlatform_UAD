@@ -11,7 +11,7 @@ public class PlayerAnimation : MonoBehaviour
 {
     [SerializeField]
     List<SpriteAnim> _anims;
-    public enum myAnimations {Idle,Moving,Dying,Attack1,Jump,Run,Dash};
+    public enum myAnimations { Idle, Moving, Dying, Attack1, Jump, Run, Dash };
     [SerializeField]
     public myAnimations _animationsID;
     public myAnimations _prevAnimation; // No tocar esta variable fuera del script
@@ -19,6 +19,7 @@ public class PlayerAnimation : MonoBehaviour
     SpriteRenderer _spriteRen;
     [SerializeField]
     PlayerMovement _player;
+    bool _isPlaying;
 
 
 
@@ -42,6 +43,7 @@ public class PlayerAnimation : MonoBehaviour
     {
         if (_prevAnimation != _animationsID && _canExit[_currentAnim] == true)
         {
+            _isPlaying = true;
             ChangeAnim();
         }
         {
@@ -61,6 +63,7 @@ public class PlayerAnimation : MonoBehaviour
                 } else
                 {
                     _currentFrame = _anims[_currentAnim]._frames.Count;
+                    _isPlaying = false;
                 }
                 if (_isOnPermaAnim == true && _canLoop[_currentAnim])
                 {
@@ -68,7 +71,10 @@ public class PlayerAnimation : MonoBehaviour
                 }
             }
         }
-        _spriteRen.sprite = _anims[_currentAnim]._frames[_currentFrame];
+        if (_isPlaying)
+        {
+            _spriteRen.sprite = _anims[_currentAnim]._frames[_currentFrame];
+        }
     }
 
     private void ChangeAnim()

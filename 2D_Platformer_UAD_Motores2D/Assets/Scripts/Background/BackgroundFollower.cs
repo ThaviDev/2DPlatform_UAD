@@ -10,12 +10,13 @@ public class BackgroundFollower : MonoBehaviour
     [SerializeField] float maxXLimit = 5;
     [SerializeField] float minXLimit = -5;
 
-    [SerializeField] float _teleportDistance = 9.6f;
+    [SerializeField] float _teleportDistance;
 
     Vector3 _initialOffset;
 
     private void Start()
     {
+
         _initialOffset = transform.position;
     }
 
@@ -28,11 +29,11 @@ public class BackgroundFollower : MonoBehaviour
 
         if (transform.position.x < minXLimit + _cam.transform.position.x)
         {
-            _initialOffset.x += _teleportDistance;
+            _initialOffset.x += _teleportDistance * 5;
         }
         if (transform.position.x > maxXLimit + _cam.transform.position.x)
         {
-            _initialOffset.x -= _teleportDistance;
+            _initialOffset.x -= _teleportDistance * 5;
         }
         //print(maxXLimit + _cam.transform.position.x);
     }

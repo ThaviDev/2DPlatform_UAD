@@ -9,10 +9,16 @@ public class FruitColector : MonoBehaviour
     [SerializeField] int _fruitToHeal;
 
     [SerializeField] PlayerMovement _player;
+    [SerializeField] UIColectables _colectables;
 
     private void Start()
     {
         _player = GetComponent<PlayerMovement>();
+    }
+
+    private void Update()
+    {
+        _colectables._fruitCount = _fruitAmount;
     }
 
     public void AddFruit()
